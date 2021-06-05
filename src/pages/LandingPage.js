@@ -1,9 +1,5 @@
-import Login from "../views/Login";
+import Login from "./views/SignUpBox";
 
 export default function LandingPage() {
-  return (
-    <div>
-      <Login />
-    </div>
-  );
+  return <div></div>;
 }
