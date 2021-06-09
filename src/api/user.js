@@ -55,7 +55,8 @@ const signUp = (email, password, name, description, image) => {
 };
 
 const readUser = (userId) => {
-  db.collection("users")
+  return db
+    .collection("users")
     .doc(userId)
     .withConverter(userConverter)
     .get()
@@ -103,4 +104,5 @@ const getUserImage = (userId) => {
       return imageRef.getDownloadURL();
     });
 };
+
 export { signIn, initializeUser, signUp, readUser, getUserImage };

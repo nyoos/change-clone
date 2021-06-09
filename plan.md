@@ -40,3 +40,6 @@ landing page
 ->call to action
 ->top proposals
 ->browse section
+
+to add:
+remember photo in proposal form

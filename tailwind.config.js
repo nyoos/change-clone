@@ -23,6 +23,9 @@ module.exports = {
         "960px": "960px",
         "600px": "600px",
       },
+      margin: {
+        "-3px": "-3px",
+      },
     },
   },
   variants: {

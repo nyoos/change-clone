@@ -70,7 +70,7 @@ export default function SignUpBox() {
           placeholder: "Password",
         })}
         <div className="py-1 px-2 w-full active:border-gray-400 flex flex-col">
-          <label className="mb-1" for="profileImage">
+          <label className="mb-1" htmlFor="profileImage">
             Upload a picture:
           </label>
           <input
@@ -84,7 +84,7 @@ export default function SignUpBox() {
       </div>
       <div className="mt-3">
         <textarea
-          className="border rounded-sm w-full border-gray-300 py-1 px-1"
+          className="long-text-area"
           name="description"
           rows="5"
           placeholder="Description"

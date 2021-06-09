@@ -7,17 +7,17 @@ import { UserIcon } from "../pages/components/UserIcon";
 
 function NavLinks({ userStatus, userId, showLogin }) {
   return (
-    <ul>
+    <ul className="space-y-2">
       <li>
         <Link to="/proposals"> Browse </Link>
       </li>
       {userStatus === "hasUser" ? (
         <React.Fragment>
           <li>
-            <Link to="/createProposal"> Create Proposal </Link>
+            <Link to="/create_proposal"> Create Proposal </Link>
           </li>
           <li>
-            <Link to={`/userPage/${userId}`}> My Page </Link>
+            <Link to={`/user/${userId}`}> My Page </Link>
           </li>
         </React.Fragment>
       ) : (
@@ -39,8 +39,8 @@ export default function Navbar({ showLogin }) {
 
   const Logo = () => {
     return (
-      <p className="text-3xl font-bold text-theme-red tracking-tight">
-        change.sg
+      <p className="text-3xl font-bold text-theme-red tracking-tighter">
+        change.org
       </p>
     );
   };
@@ -48,12 +48,20 @@ export default function Navbar({ showLogin }) {
   const Dropdown = () => {
     if (showDropdown) {
       return (
-        <div className="fixed top-14 right-5 z-40 shadow-lg">
-          <NavLinks
-            userStatus={user.status}
-            userId={user.data.uid}
-            showLogin={showLogin}
-          />
+        <div
+          className="fixed h-full w-full top-0 h-0 z-40"
+          onClick={toggleDropdown}
+        >
+          <div className="fixed top-12 right-2 z-40">
+            <div className="triangle border-b border-white empty-content-before float-right z-50 -mt-3px  mr-1"></div>
+            <div className="mt-2 shadow-lg bg-white p-3 text-lg border border-gray-300 rounded-sm ">
+              <NavLinks
+                userStatus={user.status}
+                userId={user.data.uid}
+                showLogin={showLogin}
+              />
+            </div>
+          </div>
         </div>
       );
     } else return null;
@@ -78,7 +86,7 @@ export default function Navbar({ showLogin }) {
     );
   } else
     return (
-      <nav className="fixed top-0 left-0 z-30 h-14 w-full flex flex-row shadow">
+      <nav className="fixed top-0 left-0 z-30 h-14 w-full flex flex-row shadow bg-white">
         <div className="w-full px-3 m-auto">
           <div className="flex flex-row items-center justify-between self-start">
             <Logo />
@@ -89,10 +97,7 @@ export default function Navbar({ showLogin }) {
                   styling="h-10 w-10 rounded-full border-2 border-gray-400"
                 />
               ) : null}
-              <button
-                className={`text-2xl ${showDropdown ? "text-theme-red" : ""}`}
-                onClick={toggleDropdown}
-              >
+              <button className={`text-2xl `} onClick={toggleDropdown}>
                 &#9776;
               </button>
             </div>

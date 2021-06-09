@@ -2,13 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+.empty-content-before::before {
+  content: "";
+}
+
+.empty-content-before {
+  width: 10%;
+  padding-bottom: 7.09%;
+}
+
 @layer base {
   h1 {
-    @apply text-2xl;
+    @apply text-3xl;
     @apply font-bold;
   }
   h2 {
     @apply text-xl;
     @apply font-bold;
+  }
+}
+
+@layer components {
+  .long-text-area {
+    @apply border rounded-sm w-full border-gray-300 py-1 px-1;
+  }
+  .triangle {
+    @apply relative overflow-hidden;
+  }
+  .triangle:before {
+    @apply absolute top-0 left-0 w-full h-full bg-white border border-gray-300 transform origin-bottom-left rotate-45;
   }
 }
