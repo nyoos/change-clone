@@ -11,6 +11,7 @@ export default function LoginContainer({ showLogin, closeLogin }) {
   if (user.status === "hasUser") {
     closeLogin();
   }
+
   const ToggleButton = ({ text }) => {
     return (
       <button

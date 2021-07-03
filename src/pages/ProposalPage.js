@@ -9,8 +9,8 @@ import { readUser } from "../api/user";
 import { selectUser } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
 import ActionButton from "./components/ActionButton";
-import StandardButton from "./components/StandardButton";
 import CommentFormContainer from "../containers/CommentFormContainer";
+import Discussions from "./views/DiscussionView";
 export default function ProposalPage({ showLogin }) {
   const user = useSelector(selectUser);
   const { proposalId } = useParams();
@@ -61,17 +61,20 @@ export default function ProposalPage({ showLogin }) {
     );
   };
 
-  const Discussions = () => {
-    return (
-      <div className="w-full bg-gray-200 px-4 py-6 space-y-4">
-        <h2>Discussions</h2>
-        <StandardButton
-          text="Leave a comment"
-          styling="w-full"
-          onClick={() => setShowCommentForm(true)}
-        />
-      </div>
-    );
+  const addSign = () => {
+    if (user.status === "hasUser") {
+      upvoteProposal(proposalId);
+    } else {
+      showLogin();
+    }
+  };
+
+  const displayCommentForm = () => {
+    if (user.status === "hasUser") {
+      setShowCommentForm(true);
+    } else {
+      showLogin();
+    }
   };
 
   const content = () => {
@@ -85,18 +88,19 @@ export default function ProposalPage({ showLogin }) {
       return (
         <div>
           <ProposalDisplay />
-          <Discussions />
-          {showCommentForm ? <CommentFormContainer /> : null}
+          <Discussions
+            showCommentForm={displayCommentForm}
+            proposalId={proposalId}
+          />
+          {showCommentForm ? (
+            <CommentFormContainer
+              proposalId={proposalId}
+              closeForm={() => setShowCommentForm(false)}
+              showLogin={showLogin}
+            />
+          ) : null}
         </div>
       );
-  };
-
-  const addSign = () => {
-    if (user.status === "hasUser") {
-      upvoteProposal(proposalId);
-    } else {
-      showLogin();
-    }
   };
   return (
     <div>

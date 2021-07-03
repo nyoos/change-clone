@@ -73,7 +73,6 @@ const readUser = (userId) => {
     });
 };
 const signIn = (email, password) => {
-  console.log(email, password);
   return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -84,6 +83,10 @@ const signIn = (email, password) => {
     .catch((error) => {
       throw error;
     });
+};
+
+const signOut = () => {
+  return firebase.auth().signOut();
 };
 
 const getUserImage = (userId) => {
@@ -105,4 +108,4 @@ const getUserImage = (userId) => {
     });
 };
 
-export { signIn, initializeUser, signUp, readUser, getUserImage };
+export { signIn, initializeUser, signUp, readUser, getUserImage, signOut };

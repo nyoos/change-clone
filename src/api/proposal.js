@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import Proposal from "../models/Proposal";
 import { db, storage } from "./init";
+import { uploadDiscussion } from "./discussion";
 
 const proposaldb = db.collection("proposals");
 const proposalImages = storage.ref().child("proposalImages");
@@ -35,7 +36,6 @@ var proposalConverter = {
 };
 
 const uploadProposal = async (proposal, image) => {
-  console.log(proposal);
   const docRef = await proposaldb
     .withConverter(proposalConverter)
     .add(proposal);
@@ -81,4 +81,27 @@ const upvoteProposal = async (proposalId) => {
     throw new Error("User not signed in");
   }
 };
-export { uploadProposal, readProposal, getProposalImage, upvoteProposal };
+
+const getProposals = async (lastProposal) => {
+  if (lastProposal) {
+  } else {
+    const proposalSnapshot = await proposaldb
+      .limit(5)
+      .withConverter(proposalConverter)
+      .get();
+    const proposals = [];
+    const ids = [];
+    proposalSnapshot.forEach((proposal) => {
+      proposals.push(proposal.data());
+      ids.push(proposal.id);
+    });
+    return { proposals, ids, lastProposal: proposalSnapshot.docs[-1] };
+  }
+};
+export {
+  uploadProposal,
+  readProposal,
+  getProposalImage,
+  upvoteProposal,
+  getProposals,
+};

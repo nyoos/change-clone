@@ -20,6 +20,9 @@
     @apply text-xl;
     @apply font-bold;
   }
+  button {
+    @apply font-medium;
+  }
 }
 
 @layer components {

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { use960Breakpoint } from "../util/mediabreakpoints";
-import { Link } from "react-router-dom";
-import { selectUser } from "../features/user/userSlice";
-import { useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { selectUser, signOutHandler } from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { UserIcon } from "../pages/components/UserIcon";
 
-function NavLinks({ userStatus, userId, showLogin }) {
+function NavLinks({ userStatus, userId, showLogin, logOut }) {
   return (
     <ul className="space-y-2">
       <li>
@@ -18,6 +18,9 @@ function NavLinks({ userStatus, userId, showLogin }) {
           </li>
           <li>
             <Link to={`/user/${userId}`}> My Page </Link>
+          </li>
+          <li>
+            <button onClick={logOut}> Sign Out </button>
           </li>
         </React.Fragment>
       ) : (
@@ -32,6 +35,15 @@ export default function Navbar({ showLogin }) {
   const biggerThan960 = use960Breakpoint();
   const [showDropdown, setShowDropdown] = useState(false);
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logOut = (e) => {
+    e.preventDefault();
+    dispatch(signOutHandler()).then(() => {
+      history.push("/");
+    });
+  };
 
   function toggleDropdown() {
     setShowDropdown(showDropdown ^ true);
@@ -39,9 +51,11 @@ export default function Navbar({ showLogin }) {
 
   const Logo = () => {
     return (
-      <p className="text-3xl font-bold text-theme-red tracking-tighter">
-        change.org
-      </p>
+      <Link to="/">
+        <p className="text-3xl font-bold text-theme-red tracking-tighter">
+          change.org
+        </p>
+      </Link>
     );
   };
 
@@ -49,7 +63,7 @@ export default function Navbar({ showLogin }) {
     if (showDropdown) {
       return (
         <div
-          className="fixed h-full w-full top-0 h-0 z-40"
+          className="fixed h-full w-full top-0 z-40"
           onClick={toggleDropdown}
         >
           <div className="fixed top-12 right-2 z-40">
@@ -59,6 +73,7 @@ export default function Navbar({ showLogin }) {
                 userStatus={user.status}
                 userId={user.data.uid}
                 showLogin={showLogin}
+                logOut={logOut}
               />
             </div>
           </div>
@@ -94,7 +109,7 @@ export default function Navbar({ showLogin }) {
               {user.status === "hasUser" ? (
                 <UserIcon
                   userId={user.data.uid}
-                  styling="h-10 w-10 rounded-full border-2 border-gray-400"
+                  styling="h-10 w-10 rounded-full"
                 />
               ) : null}
               <button className={`text-2xl `} onClick={toggleDropdown}>

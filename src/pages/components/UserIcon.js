@@ -19,7 +19,7 @@ export function UserIcon({ userId, styling, alt }) {
   return (
     <img
       src={image}
-      className={`rounded-full border-2 border-gray-400 ${styling}`}
+      className={`rounded-full  border border-gray-300 ${styling}`}
       alt={`${alt}`}
       onClick={handleOnClick}
     />
