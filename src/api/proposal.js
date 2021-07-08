@@ -58,6 +58,19 @@ const readProposal = async (proposalId) => {
   }
 };
 
+const readProposalUpdates = async (proposalId, setProposalInfo) => {
+  const proposalRef = proposaldb.doc(proposalId);
+  const snapshots = proposalRef
+    .withConverter(proposalConverter)
+    .onSnapshot((doc) => {
+      if (doc.exists) {
+        setProposalInfo(doc.data());
+      } else {
+        throw Error("Proposal does not exist");
+      }
+    });
+};
+
 const getProposalImage = async (proposalId) => {
   const doc = await proposaldb
     .doc(proposalId)
@@ -104,4 +117,5 @@ export {
   getProposalImage,
   upvoteProposal,
   getProposals,
+  readProposalUpdates,
 };

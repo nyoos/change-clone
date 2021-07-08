@@ -43,3 +43,7 @@ landing page
 
 to add:
 remember photo in proposal form
+
+added features:
+landing page desktop view
+proposalview update supporter number and thank you for signing button
