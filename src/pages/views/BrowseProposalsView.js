@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getProposals } from "../../api/proposal";
 import ProposalCard from "../components/ProposalCard";
+// To do: Infinite scroll
+
 export default function BrowseProposalsView() {
   const [proposals, setProposals] = useState();
   const [lastProposal, setLastProposal] = useState();

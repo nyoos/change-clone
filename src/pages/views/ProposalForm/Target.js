@@ -7,7 +7,7 @@ export default function Target({ target, setTarget, maxLength, next }) {
     if (target.length) {
       next();
     } else {
-      setError("Please add a decision maker");
+      setError("Please add a decision maker.");
     }
   };
   return (

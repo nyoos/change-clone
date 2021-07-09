@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { signInHandler } from "../../features/user/userSlice";
+import { selectUser, signInHandler } from "../../features/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ActionButton from "../components/ActionButton";
-// To do: error handling
 
 export default function LogInBox() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const user = useSelector(selectUser);
+
   const dispatch = useDispatch();
 
   const changePassword = (event) => {
@@ -52,7 +53,11 @@ export default function LogInBox() {
           placeholder: "Password",
         })}
       </div>
-      <div className="mt-6 flex justify-center">
+      <div className="h-3">
+        <p className="text-xs text-red-800">{user.error.login}</p>
+      </div>
+
+      <div className="mt-4 flex justify-center">
         <ActionButton type="submit" onClick={submitform} text="Log In" />
       </div>
     </form>

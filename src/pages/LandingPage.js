@@ -2,6 +2,7 @@ import { useHistory } from "react-router";
 import ActionButton from "./components/ActionButton";
 import BrowseProposalsView from "./views/BrowseProposalsView";
 import Login from "./views/SignUpBox";
+
 export default function LandingPage() {
   const history = useHistory();
   const redirectToProposal = () => {

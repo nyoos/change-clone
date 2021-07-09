@@ -6,11 +6,6 @@ import LogInBox from "../pages/views/LogInBox";
 import { selectUser } from "../features/user/userSlice";
 export default function LoginContainer({ showLogin, closeLogin }) {
   const [showSignUp, setShowSignUp] = useState(false);
-  const user = useSelector(selectUser);
-
-  if (user.status === "hasUser") {
-    closeLogin();
-  }
 
   const ToggleButton = ({ text }) => {
     return (

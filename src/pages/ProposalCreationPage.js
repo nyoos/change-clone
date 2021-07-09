@@ -57,7 +57,7 @@ export default function ProposalCreationContainer() {
   const [completed, setCompleted] = useState([0, 0, 0, 0]);
   const [tab, setTab] = useState(0);
   const [proposal, setProposal] = useState(new Proposal());
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const history = useHistory();
   const setFieldInProposal = (field) => {
     return (input) => {
@@ -83,12 +83,25 @@ export default function ProposalCreationContainer() {
       image &&
       user.status === "hasUser"
     ) {
+      // const supporters = [];
+      // const num_supporters = Math.floor(Math.random() * 300) + 100;
+      // for (let i = 0; i < num_supporters; i++) {
+      //   supporters.push(i);
+      // }
+      // const toSubmit = { ...proposal, author: user.data.uid, supporters };
       const toSubmit = { ...proposal, author: user.data.uid };
       uploadProposal(toSubmit, image).then((proposalId) => {
         history.push(`/proposal/${proposalId}`);
       });
     } else {
-      console.log("Not submitted");
+      console.log([
+        proposal.title,
+        proposal.target,
+        proposal.description,
+        image,
+        user.status === "hasUser",
+      ]);
+      throw new Error("Please fill in all the fields.");
     }
   };
   const tabs = [

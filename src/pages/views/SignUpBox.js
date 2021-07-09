@@ -1,14 +1,17 @@
 import { signUp } from "../../api";
 import { useState } from "react";
 import ActionButton from "../components/ActionButton";
-// To do: error handling
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, signUpHandler } from "../../features/user/userSlice";
 
 export default function SignUpBox() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [profileImage, setProfileImage] = useState();
+  const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   const changeUsername = (event) => {
     setUsername(event.target.value);
@@ -27,8 +30,8 @@ export default function SignUpBox() {
   };
   const submitform = (e) => {
     e.preventDefault();
-    signUp(email, password, username, description, profileImage).catch(
-      (error) => alert(error)
+    dispatch(
+      signUpHandler({ email, password, username, description, profileImage })
     );
   };
 
@@ -79,6 +82,7 @@ export default function SignUpBox() {
             type="file"
             onChange={changeProfileImage}
             accept="image/*"
+            required
           />
         </div>
       </div>
@@ -90,9 +94,13 @@ export default function SignUpBox() {
           placeholder="Description"
           onChange={changeDescription}
           value={description}
+          required
         ></textarea>
       </div>
-      <div className="mt-3 flex justify-center">
+      <div className="h-3">
+        <p className="text-xs text-red-800">{user.error.signup}</p>
+      </div>
+      <div className="mt-4 flex justify-center">
         <ActionButton type="submit" onClick={submitform} text="Submit" />
       </div>
     </form>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,9 +12,26 @@ import LandingPage from "./pages/LandingPage";
 import ProposalPage from "./pages/ProposalPage";
 import UserPage from "./pages/UserPage";
 import ProposalCreationPage from "./pages/ProposalCreationPage";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  initializeSignedInHandler,
+  selectUser,
+} from "./features/user/userSlice";
+
 function App() {
   const [showLogin, setShowLogin] = useState(false);
-  const toggleLogin = () => setShowLogin(showLogin ^ true);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeSignedInHandler());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user.status === "hasUser") {
+      setShowLogin(false);
+    }
+  }, [user]);
 
   return (
     <Router>

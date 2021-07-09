@@ -12,7 +12,7 @@ export default function Description({
     if (description.length) {
       next();
     } else {
-      setError("Please tell your story");
+      setError("Please tell your story.");
     }
   };
 

@@ -86,7 +86,7 @@ const getProposals = async (lastProposal) => {
   if (lastProposal) {
   } else {
     const proposalSnapshot = await proposaldb
-      .limit(5)
+      .limit(10)
       .withConverter(proposalConverter)
       .get();
     const proposals = [];

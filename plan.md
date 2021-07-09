@@ -43,3 +43,8 @@ landing page
 
 to add:
 remember photo in proposal form
+
+to do:
+
+petition signing live update of numbers and changing of sign button
+desktop version

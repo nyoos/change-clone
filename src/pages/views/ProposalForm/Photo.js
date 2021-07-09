@@ -2,13 +2,28 @@ import "react-image-crop/dist/ReactCrop.css";
 import ReactCrop from "react-image-crop";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ActionButton from "../../components/ActionButton";
+import autoprefixer from "autoprefixer";
 
 export default function Photo({ photo, setPhoto, next }) {
-  const [upImg, setUpImg] = useState();
+  const [upImg, setUpImg] = useState(null);
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [crop, setCrop] = useState({ unit: "%", width: 30, aspect: 16 / 9 });
   const [completedCrop, setCompletedCrop] = useState(null);
+  const [error, setError] = useState("");
+
+  const complete = () => {
+    if (!(!completedCrop?.width || !completedCrop?.height)) {
+      try {
+        next();
+      } catch (error) {
+        setError(error.message);
+      }
+    } else {
+      setError("Please include a photo.");
+    }
+  };
+
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
@@ -20,6 +35,7 @@ export default function Photo({ photo, setPhoto, next }) {
   const onLoad = useCallback((img) => {
     imgRef.current = img;
   }, []);
+
   useEffect(() => {
     if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
       return;
@@ -51,7 +67,10 @@ export default function Photo({ photo, setPhoto, next }) {
       crop.width,
       crop.height
     );
-  }, [completedCrop]);
+    previewCanvasRef.current.toBlob((blob) => {
+      setPhoto(blob);
+    });
+  }, [completedCrop, setPhoto]);
   return (
     <div>
       <h1 className="text-3xl mb-2">Add a photo or video</h1>
@@ -63,7 +82,7 @@ export default function Photo({ photo, setPhoto, next }) {
       <div className="mx-3 pt-2">
         <div>
           <label
-            for="file-upload"
+            htmlFor="file-upload"
             className="bg-theme-white border-2 border-gray-400 hover:border-gray-600 py-2 px-4 text-theme-black font-bold rounded-md
             block my-3 text-center"
           >
@@ -91,18 +110,14 @@ export default function Photo({ photo, setPhoto, next }) {
             style={{
               width: Math.round(completedCrop?.width ?? 0),
               height: Math.round(completedCrop?.height ?? 0),
+              margin: "auto",
             }}
           />
         </div>
+        <p className="text-s text-red-800">{error}</p>
         <ActionButton
           type="button"
-          disabled={!completedCrop?.width || !completedCrop?.height}
-          onClick={() =>
-            previewCanvasRef.current.toBlob((blob) => {
-              setPhoto(blob);
-              next();
-            })
-          }
+          onClick={complete}
           styling="w-full mt-3"
           text="Submit"
         />
