@@ -8,19 +8,17 @@ function infoBox(status, userInfo, userId) {
   } else {
     return (
       <div>
-        <div className="flex flex-row pb-3 px-3 justify-between">
-          <div className="flex flex-col justify-start">
-            <h1 className="text-3xl">{userInfo.name}</h1>
-            <p>Proposals: {userInfo.proposals.length}</p>
-            <p>Contributions: {userInfo.comments.length}</p>
-          </div>
+        <div className="flex flex-col pb-3 px-3 mx-8 justify-between items-center">
           <UserIcon
             userId={userId}
             styling="w-36 rounded-full border-2 border-gray-400"
           />
+          <div className="flex flex-col justify-start mt-6">
+            <h1 className="text-3xl">{userInfo.name}</h1>
+          </div>
         </div>
         <span className="block w-9 m-auto border-b-2 border-gray-300"></span>
-        <div className="mt-3 flex flex-col  pb-3">
+        <div className="mt-6 flex flex-col text-center pb-10 mx-5 md:mx-10">
           <p>{userInfo.description}</p>
         </div>
       </div>
@@ -40,7 +38,7 @@ export default function UserPage({ match }) {
 
   return (
     <div>
-      <div className="pt-8 px-4 border-b-2 border-gray-300">
+      <div className="pt-8 px-4 mx-2 border-b-2 border-gray-300 md:mx-auto md:w-768px">
         {infoBox(status, userInfo, userId)}
       </div>
     </div>

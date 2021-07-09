@@ -21,7 +21,7 @@ export default function DiscussionView({ showCommentForm, proposalId }) {
       ));
   };
   return (
-    <div className="w-full bg-gray-200 px-4 py-6 space-y-4">
+    <div className="w-full bg-gray-200 px-4 py-6 space-y-4 md:bg-white md:px-0">
       <h2>Discussions</h2>
       {showDiscussions()}
       <StandardButton

@@ -21,15 +21,23 @@ module.exports = {
       },
       width: {
         "960px": "960px",
+        "768px": "768px",
         "600px": "600px",
+        "142px": "142px",
+      },
+      height: {
+        "142px": "142px",
       },
       margin: {
         "-3px": "-3px",
+      },
+      gridTemplateColumns: {
+        cardLeftPhoto: "70% 30%",
       },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

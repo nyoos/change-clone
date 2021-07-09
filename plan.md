@@ -44,7 +44,13 @@ landing page
 to add:
 remember photo in proposal form
 
+<<<<<<< HEAD
 to do:
 
 petition signing live update of numbers and changing of sign button
 desktop version
+=======
+added features:
+landing page desktop view
+proposalview update supporter number and thank you for signing button
+>>>>>>> origin/main

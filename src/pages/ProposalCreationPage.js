@@ -14,7 +14,7 @@ const tabButtons = (tabs, tab, setTab, completed) => {
     if (completed[index]) {
       return (
         <button
-          className={`rounded-full w-12 h-12 border-2 border-theme-red text-xl ${
+          className={`rounded-full w-10 h-10 border-2 border-theme-red text-md ${
             tab === index
               ? "bg-theme-red text-white"
               : "bg-theme-white text-theme-red"
@@ -27,7 +27,7 @@ const tabButtons = (tabs, tab, setTab, completed) => {
     } else {
       return (
         <button
-          className={`rounded-full w-12 h-12 border-2 text-xl ${
+          className={`rounded-full w-10 h-10 border-2 text-md ${
             tab === index
               ? "border-theme-red bg-theme-red text-white"
               : "bg-theme-white border-gray-500 text-gray-500"
@@ -108,7 +108,7 @@ export default function ProposalCreationContainer() {
     <Title
       title={proposal.title}
       setTitle={setFieldInProposal("title")}
-      maxLength="200"
+      maxLength="90"
       next={() => next(0)}
     />,
     <Target
@@ -128,7 +128,7 @@ export default function ProposalCreationContainer() {
 
   return (
     <div>
-      <div className="flex flex-row justify-evenly py-12 px-10">
+      <div className="flex flex-row justify-evenly py-12 px-10 w-96 mx-auto">
         {tabButtons(tabIndexes, tab, setTab, completed)}
       </div>
       <div className="px-2">{tabs[tab]}</div>
