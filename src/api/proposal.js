@@ -58,17 +58,15 @@ const readProposal = async (proposalId) => {
   }
 };
 
-const readProposalUpdates = async (proposalId, setProposalInfo) => {
+const readProposalUpdates = async (proposalId, setProposalInfo, setError) => {
   const proposalRef = proposaldb.doc(proposalId);
-  const snapshots = proposalRef
-    .withConverter(proposalConverter)
-    .onSnapshot((doc) => {
-      if (doc.exists) {
-        setProposalInfo(doc.data());
-      } else {
-        throw Error("Proposal does not exist");
-      }
-    });
+  return proposalRef.withConverter(proposalConverter).onSnapshot((doc) => {
+    if (doc.exists) {
+      setProposalInfo(doc.data());
+    } else {
+      setError(Error("Proposal does not exist"));
+    }
+  });
 };
 
 const getProposalImage = async (proposalId) => {
@@ -95,11 +93,16 @@ const upvoteProposal = async (proposalId) => {
   }
 };
 
+const countProposals = async () => {
+  return proposaldb.get().then((querySnapshot) => {
+    return querySnapshot.size;
+  });
+};
 const getProposals = async (lastProposal) => {
   if (lastProposal) {
-  } else {
     const proposalSnapshot = await proposaldb
-      .limit(10)
+      .startAfter(lastProposal)
+      .limit(4)
       .withConverter(proposalConverter)
       .get();
     const proposals = [];
@@ -108,7 +111,27 @@ const getProposals = async (lastProposal) => {
       proposals.push(proposal.data());
       ids.push(proposal.id);
     });
-    return { proposals, ids, lastProposal: proposalSnapshot.docs[-1] };
+    return {
+      proposals,
+      ids,
+      lastProposal: proposalSnapshot.docs[[proposalSnapshot.docs.length - 1]],
+    };
+  } else {
+    const proposalSnapshot = await proposaldb
+      .limit(4)
+      .withConverter(proposalConverter)
+      .get();
+    const proposals = [];
+    const ids = [];
+    proposalSnapshot.forEach((proposal) => {
+      proposals.push(proposal.data());
+      ids.push(proposal.id);
+    });
+    return {
+      proposals,
+      ids,
+      lastProposal: proposalSnapshot.docs[proposalSnapshot.docs.length - 1],
+    };
   }
 };
 export {
@@ -118,4 +141,5 @@ export {
   upvoteProposal,
   getProposals,
   readProposalUpdates,
+  countProposals,
 };

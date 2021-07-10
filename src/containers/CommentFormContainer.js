@@ -9,12 +9,16 @@ import CommentForm from "../pages/views/CommentForm";
 export default function CommentFormContainer({ proposalId, closeForm }) {
   const user = useSelector(selectUser);
   const [comment, setComment] = useState("");
+  const [error, setError] = useState("");
   const changeComment = (event) => {
     setComment(event.target.value);
   };
 
   const submitComment = (e) => {
     e.preventDefault();
+    if (!comment) {
+      setError("Please enter a comment.");
+    }
     if (user.status === "hasUser" && comment) {
       uploadDiscussion(proposalId, new Discussion(user.data.uid, comment)).then(
         closeForm
@@ -27,19 +31,12 @@ export default function CommentFormContainer({ proposalId, closeForm }) {
   }
 
   return (
-    <ModalWrapper clickAway={closeForm}>
-      <div className="relative bg-white rounded m-auto w-600px max-w-full-sm z-50">
-        <button className="absolute top-2 right-3 text-xl" onClick={closeForm}>
-          &#x2715;
-        </button>
-        <div className="p-6">
-          <CommentForm
-            comment={comment}
-            changeComment={changeComment}
-            submitComment={submitComment}
-          />
-        </div>
-      </div>
-    </ModalWrapper>
+    <CommentForm
+      comment={comment}
+      changeComment={changeComment}
+      submitComment={submitComment}
+      closeForm={closeForm}
+      error={error}
+    />
   );
 }

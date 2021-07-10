@@ -12,7 +12,7 @@ export default function CommentCard({ discussion }) {
     });
   }, [discussion]);
   return (
-    <div className="bg-white p-2 rounded-sm space-y-2">
+    <div className="bg-white p-2 md:pt-4 rounded-sm space-y-2">
       <div className="flex space-x-2 items-center">
         <UserIcon userId={discussion.author} styling="w-10" />
         <Link to={`/user/${discussion.author}`}>

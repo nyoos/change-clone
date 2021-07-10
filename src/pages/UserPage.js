@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { readUser } from "../api/user";
 import { UserIcon } from "./components/UserIcon";
 
@@ -29,12 +30,15 @@ export default function UserPage({ match }) {
   const userId = match.params.userId;
   const [userInfo, setUserInfo] = useState();
   const [status, setStatus] = useState("loading");
+  const history = useHistory();
   useEffect(() => {
-    readUser(userId).then((user) => {
-      setUserInfo(user);
-      setStatus("completed");
-    });
-  }, [userId]);
+    readUser(userId)
+      .then((user) => {
+        setUserInfo(user);
+        setStatus("completed");
+      })
+      .catch((error) => history.push("/404"));
+  }, [userId, history]);
 
   return (
     <div>

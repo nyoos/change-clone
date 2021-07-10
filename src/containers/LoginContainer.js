@@ -45,9 +45,9 @@ export default function LoginContainer({ showLogin, closeLogin }) {
   if (showLogin) {
     return (
       <ModalWrapper clickAway={closeLogin}>
-        <div className="relative bg-white rounded m-auto w-600px max-w-full-sm z-50">
+        <div className="relative bg-white rounded m-auto w-full h-full max-w-full-sm z-50 animate-expand-fast md:w-96 md:h-auto">
           <button
-            className="absolute top-2 right-3 text-xl"
+            className="absolute top-2 right-3 text-3xl md:text-xl"
             onClick={closeLogin}
           >
             &#x2715;

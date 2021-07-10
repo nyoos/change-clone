@@ -84,7 +84,7 @@ export default function ProposalCreationContainer() {
       user.status === "hasUser"
     ) {
       // const supporters = [];
-      // const num_supporters = Math.floor(Math.random() * 300) + 100;
+      // const num_supporters = Math.floor(Math.random() * 10000) + 1000;
       // for (let i = 0; i < num_supporters; i++) {
       //   supporters.push(i);
       // }
@@ -131,7 +131,7 @@ export default function ProposalCreationContainer() {
       <div className="flex flex-row justify-evenly py-12 px-10 w-96 mx-auto">
         {tabButtons(tabIndexes, tab, setTab, completed)}
       </div>
-      <div className="px-2">{tabs[tab]}</div>
+      <div className="px-2 md:w-768px mx-auto">{tabs[tab]}</div>
     </div>
   );
 }

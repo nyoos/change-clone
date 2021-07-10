@@ -5,36 +5,39 @@ import {
   upvoteProposal,
 } from "../api/proposal";
 import { ProposalIcon } from "./components/ProposalIcon";
-import { List } from "react-content-loader";
+import { BulletList, List } from "react-content-loader";
 import React from "react";
 import { UserIcon } from "./components/UserIcon";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { readUser } from "../api/user";
 import { selectUser } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
 import ActionButton from "./components/ActionButton";
-import CommentFormContainer from "../containers/CommentFormContainer";
 import Discussions from "./views/DiscussionView";
 import { use768Breakpoint } from "../util/mediabreakpoints";
+import { ProposalMilestones } from "./components/ProposalMilestones";
 export default function ProposalPage({ showLogin }) {
   const user = useSelector(selectUser);
   const { proposalId } = useParams();
   const [proposalInfo, setProposalInfo] = useState();
   const [author, setAuthorInfo] = useState();
   const [status, setStatus] = useState("loading");
-  const [showCommentForm, setShowCommentForm] = useState(false);
-
+  const history = useHistory();
   const biggerThan768 = use768Breakpoint();
 
   useEffect(() => {
-    readProposalUpdates(proposalId, (proposal) => {
-      setProposalInfo(proposal);
-      readUser(proposal.author).then((user) => {
-        setAuthorInfo(user);
-        setStatus("completed");
-      });
-    });
-  }, [proposalId]);
+    readProposalUpdates(
+      proposalId,
+      (proposal) => {
+        setProposalInfo(proposal);
+        readUser(proposal.author).then((user) => {
+          setAuthorInfo(user);
+          setStatus("completed");
+        });
+      },
+      (error) => history.push("/404")
+    );
+  }, [proposalId, history]);
 
   const ProposalSubText = () => {
     return (
@@ -54,12 +57,9 @@ export default function ProposalPage({ showLogin }) {
       <div>
         <div className="border-b border-gray-300 space-y-2 w-full px-4 pb-2">
           <h1> {proposalInfo.title} </h1>
-          <p>
-            {" "}
-            <b>
-              <span>{proposalInfo.supporters.length}</span> have signed.{" "}
-            </b>
-          </p>
+          <ProposalMilestones
+            numberOfSupporters={proposalInfo.supporters.length}
+          />
 
           {ProposalSubText()}
         </div>
@@ -78,22 +78,17 @@ export default function ProposalPage({ showLogin }) {
     }
   };
 
-  const displayCommentForm = () => {
-    if (user.status === "hasUser") {
-      setShowCommentForm(true);
-    } else {
-      showLogin();
-    }
+  const hasSigned = () => {
+    return proposalInfo.supporters.includes(user.data.uid);
   };
-
   const SignButton = () => {
     if (user.status === "hasUser" && status === "completed") {
-      if (proposalInfo.supporters.includes(user.data.uid)) {
+      if (hasSigned()) {
         return (
           <ActionButton
             text="✔ Thank you for signing!"
             onClick={() => {}}
-            styling="w-full m-auto h-12 md:h-10 md:text-sm md:px-2"
+            styling="w-full m-auto h-12 md:h-10 md:text-sm md:px-0"
           />
         );
       }
@@ -118,17 +113,7 @@ export default function ProposalPage({ showLogin }) {
       return (
         <div>
           <ProposalDisplay />
-          <Discussions
-            showCommentForm={displayCommentForm}
-            proposalId={proposalId}
-          />
-          {showCommentForm ? (
-            <CommentFormContainer
-              proposalId={proposalId}
-              closeForm={() => setShowCommentForm(false)}
-              showLogin={showLogin}
-            />
-          ) : null}
+          <Discussions proposalId={proposalId} showLogin={showLogin} />
         </div>
       );
   };
@@ -136,13 +121,13 @@ export default function ProposalPage({ showLogin }) {
   const content768 = () => {
     if (status === "loading")
       return (
-        <div className="w-full m-auto">
-          <List />
+        <div className="w-768px mt-32 mx-auto">
+          <BulletList />
         </div>
       );
     else
       return (
-        <div className="w-768px px-10 mt-24 mx-auto">
+        <div className="w-768px px-10 mt-24 mx-auto xl:w-1024px">
           <h1 className="text-center">{proposalInfo.title}</h1>
           <div className="w-full mt-10 grid grid-cols-cardLeftPhoto">
             <div className="pr-10">
@@ -156,25 +141,16 @@ export default function ProposalPage({ showLogin }) {
               <div className="text-lg py-5 whitespace-pre-wrap pb-5">
                 {proposalInfo.description}
               </div>
-              <Discussions
-                showCommentForm={displayCommentForm}
-                proposalId={proposalId}
-              />
-              {showCommentForm ? (
-                <CommentFormContainer
-                  proposalId={proposalId}
-                  closeForm={() => setShowCommentForm(false)}
-                  showLogin={showLogin}
-                />
-              ) : null}
+              <Discussions proposalId={proposalId} showLogin={showLogin} />
             </div>
             <div>
-              <p className="mb-2">
-                <b>
-                  <span>{proposalInfo.supporters.length}</span> have signed.{" "}
-                </b>
-              </p>
-              <SignButton />
+              <div className="bg-gray-100 p-4 rounded sticky top-20">
+                <ProposalMilestones
+                  numberOfSupporters={proposalInfo.supporters.length}
+                  hasSigned={hasSigned()}
+                />
+                <SignButton />
+              </div>
             </div>
           </div>
         </div>

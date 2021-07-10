@@ -38,7 +38,13 @@ export default function Target({ target, setTarget, maxLength, next }) {
           {Number(maxLength) - target.length}
         </span>
       </div>
-      <ActionButton text="Continue" styling="w-full mt-4" onClick={complete} />
+      <div className="md:flex md:justify-end md:mb-3">
+        <ActionButton
+          text="Continue"
+          styling="w-full mt-4 md:w-min md:float-right"
+          onClick={complete}
+        />
+      </div>
     </div>
   );
 }

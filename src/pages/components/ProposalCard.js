@@ -6,6 +6,7 @@ import { ProposalIcon } from "./ProposalIcon";
 import { UserIcon } from "./UserIcon";
 import SupporterIcon from "../../assets/people.svg";
 export default function ProposalCard({ proposal, proposalId }) {
+  const formatter = new Intl.NumberFormat();
   const [authorName, setAuthorName] = useState("...");
   const history = useHistory();
   const biggerThan768 = use768Breakpoint();
@@ -20,7 +21,7 @@ export default function ProposalCard({ proposal, proposalId }) {
   if (biggerThan768) {
     return (
       <div
-        className="bg-white border-gray-300 border-t border-b px-4 py-4 text-xs md:border md:rounded-md "
+        className="bg-white border-gray-300 border-t border-b px-4 py-4 text-xs md:border md:rounded-md cursor-pointer"
         onClick={handleOnClick}
       >
         <div className="grid grid-cols-cardLeftPhoto space-x-3">
@@ -54,7 +55,7 @@ export default function ProposalCard({ proposal, proposalId }) {
               className="h-4 inline mr-2 self-center"
               alt="Supporters icon"
             />
-            {proposal.supporters.length} supporters
+            {formatter.format(proposal.supporters.length)} supporters
           </p>
         </div>
       </div>
@@ -81,7 +82,7 @@ export default function ProposalCard({ proposal, proposalId }) {
               className="h-4 inline mr-2 self-center"
               alt="Supporters icon"
             />
-            {proposal.supporters.length} supporters
+            {formatter.format(proposal.supporters.length)} supporters
           </p>
         </div>
       </div>

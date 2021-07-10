@@ -1,5 +1,5 @@
 import { signUp } from "../../api";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ActionButton from "../components/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, signUpHandler } from "../../features/user/userSlice";
@@ -12,6 +12,8 @@ export default function SignUpBox() {
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const previewCanvasRef = useRef(null);
+  const [upImg, setUpImg] = useState(null);
 
   const changeUsername = (event) => {
     setUsername(event.target.value);
@@ -26,8 +28,47 @@ export default function SignUpBox() {
     setDescription(event.target.value);
   };
   const changeProfileImage = (event) => {
-    setProfileImage(event.target.files[0]);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", (event) => {
+        // called once readAsDataURL is completed
+        setUpImg(reader.result);
+      });
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+    }
   };
+
+  useEffect(() => {
+    if (!upImg || !previewCanvasRef.current) return;
+    const canvas = previewCanvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const image = new Image();
+    image.src = upImg;
+    image.onload = () => {
+      const shorterSide = Math.min(image.height, image.width);
+      canvas.width = 150;
+      canvas.height = 150;
+      console.log(image.height, image.width, shorterSide);
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(
+        image,
+        Math.max(0, (image.width - shorterSide) / 2),
+        Math.max(0, (image.height - shorterSide) / 2),
+        shorterSide,
+        shorterSide,
+        0,
+        0,
+        150,
+        150
+      );
+      previewCanvasRef.current.toBlob((blob) => {
+        setProfileImage(blob);
+      });
+    };
+  }, [upImg]);
+
   const submitform = (e) => {
     e.preventDefault();
     dispatch(
@@ -74,7 +115,7 @@ export default function SignUpBox() {
         })}
         <div className="py-1 px-2 w-full active:border-gray-400 flex flex-col">
           <label className="mb-1" htmlFor="profileImage">
-            Upload a picture:
+            Upload a picture (optional):
           </label>
           <input
             className="text-sm"
@@ -84,6 +125,26 @@ export default function SignUpBox() {
             accept="image/*"
             required
           />
+          <div
+            className={`overflow-hidden rounded-full border-gray-300 border ${
+              upImg ? "" : "hidden"
+            }`}
+            style={{
+              margin: "auto",
+              width: "150px",
+              height: "150px",
+            }}
+          >
+            <canvas
+              ref={previewCanvasRef}
+              // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
+              style={{
+                margin: "auto",
+                width: "150px",
+                height: "150px",
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="mt-3">
@@ -101,7 +162,13 @@ export default function SignUpBox() {
         <p className="text-xs text-red-800">{user.error.signup}</p>
       </div>
       <div className="mt-4 flex justify-center">
-        <ActionButton type="submit" onClick={submitform} text="Submit" />
+        <ActionButton
+          type="submit"
+          onClick={submitform}
+          text="Submit"
+          className="w-full md:w-auto"
+          isLoading={user.status === "loading"}
+        />
       </div>
     </form>
   );

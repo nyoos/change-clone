@@ -8,15 +8,18 @@ export default function Photo({ photo, setPhoto, next }) {
   const [upImg, setUpImg] = useState(null);
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
-  const [crop, setCrop] = useState({ unit: "%", width: 30, aspect: 16 / 9 });
+  const [crop, setCrop] = useState({ unit: "%", width: 50, aspect: 16 / 9 });
   const [completedCrop, setCompletedCrop] = useState(null);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const complete = () => {
     if (!(!completedCrop?.width || !completedCrop?.height)) {
       try {
+        setIsLoading(true);
         next();
       } catch (error) {
+        setIsLoading(false);
         setError(error.message);
       }
     } else {
@@ -80,30 +83,36 @@ export default function Photo({ photo, setPhoto, next }) {
         your story.
       </p>
       <div className="mx-3 pt-2">
-        <div>
-          <label
-            htmlFor="file-upload"
-            className="bg-theme-white border-2 border-gray-400 hover:border-gray-600 py-2 px-4 text-theme-black font-bold rounded-md
-            block my-3 text-center"
-          >
-            Upload a picture
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*"
-            onChange={onSelectFile}
-            className="hidden"
-          />
+        <div className="mx-auto w-full border border-gray-400 rounded p-2">
+          <div className="flex justify-center">
+            <ReactCrop
+              src={upImg}
+              onImageLoaded={onLoad}
+              crop={crop}
+              onChange={(c) => setCrop(c)}
+              onComplete={(c) => setCompletedCrop(c)}
+              imageStyle={{ "max-height": "500px" }}
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="file-upload"
+              className="bg-theme-white border-2 border-gray-400 hover:border-gray-600 py-2 px-4 text-theme-black font-bold rounded-md
+              block my-3 text-center md:w-max md:mx-auto"
+            >
+              Upload a picture
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              onChange={onSelectFile}
+              className="hidden"
+            />
+          </div>
         </div>
-        <ReactCrop
-          src={upImg}
-          onImageLoaded={onLoad}
-          crop={crop}
-          onChange={(c) => setCrop(c)}
-          onComplete={(c) => setCompletedCrop(c)}
-        />
-        <div>
+        <div className="hidden">
           <canvas
             ref={previewCanvasRef}
             // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
@@ -115,12 +124,15 @@ export default function Photo({ photo, setPhoto, next }) {
           />
         </div>
         <p className="text-s text-red-800">{error}</p>
-        <ActionButton
-          type="button"
-          onClick={complete}
-          styling="w-full mt-3"
-          text="Submit"
-        />
+        <div className="md:flex md:justify-end md:mb-3">
+          <ActionButton
+            type="button"
+            onClick={complete}
+            styling="w-full mt-3 md:w-max"
+            text="Submit"
+            isLoading={isLoading}
+          />
+        </div>
       </div>
     </div>
   );

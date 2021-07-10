@@ -7,6 +7,7 @@
 }
 
 .empty-content-before {
+  /* width: 16.297px; */
   width: 10%;
   padding-bottom: 7.09%;
 }
@@ -22,6 +23,20 @@
   }
   button {
     @apply font-medium;
+    @apply focus:outline-none;
+    @apply focus:ring-gray-200;
+    @apply focus:ring;
+  }
+  textarea {
+    @apply outline-none;
+    @apply focus:border-gray-500;
+  }
+  input {
+    @apply outline-none;
+    @apply focus:border-gray-500;
+  }
+  a {
+    @apply hover:text-theme-red;
   }
 }
 

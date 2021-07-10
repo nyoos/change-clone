@@ -3,7 +3,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      sans: ["Montserrat", "Helvetica", "sans-serif"],
+      sans: ["Helvetica", "sans-serif"],
     },
     extend: {
       colors: {
@@ -24,6 +24,7 @@ module.exports = {
         "768px": "768px",
         "600px": "600px",
         "142px": "142px",
+        "1024px": "1024px",
       },
       height: {
         "142px": "142px",
@@ -34,10 +35,29 @@ module.exports = {
       gridTemplateColumns: {
         cardLeftPhoto: "70% 30%",
       },
+      screens: {
+        lg: "960px",
+        xl: "1024px",
+      },
+      transitionProperty: {
+        height: "height",
+      },
+      animation: {
+        "expand-fast": "expand 0.1s ease",
+      },
+      keyframes: {
+        expand: {
+          "0%": { transform: "scale(0.7)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["active"],
+      textColor: ["active"],
+    },
   },
   plugins: [require("@tailwindcss/line-clamp")],
 };

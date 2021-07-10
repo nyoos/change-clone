@@ -29,17 +29,19 @@ export default function Title({ title, setTitle, maxLength, next }) {
           setError("");
           setTitle(event.target.value);
         }}
-        maxlength={maxLength}
+        maxLength={maxLength}
       />
       <div className="flex flex-row justify-between">
         <p className="text-s text-red-800">{error}</p>
         <span className="mr-0 ml-auto">{Number(maxLength) - title.length}</span>
       </div>
-      <ActionButton
-        text="Continue"
-        styling="w-full mt-4 m-auto"
-        onClick={complete}
-      />
+      <div className="md:flex md:justify-end md:mb-3">
+        <ActionButton
+          text="Continue"
+          styling="w-full mt-4 md:w-min"
+          onClick={complete}
+        />
+      </div>
     </div>
   );
 }

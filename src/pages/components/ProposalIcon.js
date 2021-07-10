@@ -11,9 +11,13 @@ export function ProposalIcon({ proposalId, styling, alt, height, width }) {
     [history, proposalId]
   );
   useEffect(() => {
-    getProposalImage(proposalId).then((res) => {
-      setImage(res);
-    });
+    getProposalImage(proposalId)
+      .then((res) => {
+        setImage(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [proposalId]);
 
   if (image)

@@ -58,7 +58,12 @@ export default function LogInBox() {
       </div>
 
       <div className="mt-4 flex justify-center">
-        <ActionButton type="submit" onClick={submitform} text="Log In" />
+        <ActionButton
+          type="submit"
+          onClick={submitform}
+          text="Log In"
+          className="w-full md:w-auto"
+        />
       </div>
     </form>
   );
