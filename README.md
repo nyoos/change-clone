@@ -2,6 +2,6 @@ This website is a clone of change.org, made for the final project of The Odin Pr
 
 Built from scratch with React + Redux, Tailwind and Firebase, and bootstrapped with create-react-app.
 
-Created by nyoos
+Created by Sun I
 
 Content and images were taken from change.org.
